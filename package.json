@@ -1,0 +1,15 @@
+{
+  "name": "event_reminder_bot",
+  "version": "1.0.0",
+  "description": "Discord bot. Reminds user about some event with direct message.",
+  "main": "core.mjs",
+  "scripts": {
+    "start": "node --experimental-modules core.mjs"
+  },
+  "keywords": [],
+  "author": "Nick Rimer",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
+}
