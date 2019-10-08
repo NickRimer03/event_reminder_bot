@@ -10,6 +10,7 @@
   "author": "Nick Rimer",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "discord.js": "^11.5.1",
+    "pg": "^7.12.1"
   }
 }
