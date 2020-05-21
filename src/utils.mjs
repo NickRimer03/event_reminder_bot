@@ -1,10 +1,10 @@
-import config from "../config.json";
+import appConfig from "../config.mjs";
 import { reportBad } from "./texts.mjs";
 
-const { maxDisplayNameLength } = config;
+const { maxDisplayNameLength } = appConfig;
 
 export function rejectPromise(msg, err) {
-  msg.react(reportBad).catch(err => console.log(err));
+  msg.react(reportBad).catch((err) => console.log(err));
   console.log(err);
 }
 

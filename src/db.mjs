@@ -3,10 +3,10 @@ import { parseDBUsersTable } from "./utils.mjs";
 
 const usersTableName = "guild_users";
 const serviceTableName = "service_info";
-const pool = new PG.Pool({ connectionString: process.argv[3] || process.env.DATABASE_URL, ssl: true });
 
 export async function getDBServiceInfo() {
   try {
+    const pool = new PG.Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
     const client = await pool.connect();
     const result = await client.query(`SELECT * FROM ${serviceTableName}`);
     client.release();
