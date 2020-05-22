@@ -1,10 +1,11 @@
-import { dbError, helpText, reportBad, reportGood } from "./texts.mjs";
-import { rejectPromise } from "./utils.mjs";
-import { getDBUsers } from "./db.mjs";
-import appConfig from "../config.mjs";
+import { dbError, reportBad, reportGood, service } from "../texts.mjs";
+import { log, rejectPromise, repl } from "../utils.mjs";
+import { getDBUsers } from "../db.mjs";
+import emitter from "../emitter.mjs";
+import appConfig from "../../config.mjs";
 import Discord from "discord.js";
 
-const { cmdPrefix, argPrefix, maxDisplayNameLength, usersPerTable } = appConfig;
+const { cmdPrefix, maxDisplayNameLength, usersPerTable } = appConfig;
 const { RichEmbed } = Discord;
 // const query = [];
 
@@ -21,28 +22,25 @@ export default ({ message, state, client }) => {
     channel.send(dbError).catch((err) => console.log(err));
   }
 
-  const str = content.slice(cmdPrefix.length).trim();
-  const cmd = (str.match(/^\S+/) || [])[0];
-  const args = (str.match(new RegExp(`${argPrefix}\\S+(\\s[^-]\\S+)?`, "g")) || []).map((elem) =>
-    Object.fromEntries(elem.split(/ +/).map((e, i) => (i === 0 ? ["key", e.slice(argPrefix.length)] : ["val", e])))
-  );
-  const keys = args.map(({ key }) => key);
+  const { cmd, args, keys } = repl(content);
+  log("cmd: ", cmd);
+  log("args: ", args);
+  log("keys: ", keys);
 
   // SERVICE COMMANDS
   if (["c", "clr", "clear"].includes(cmd)) {
-    channel.bulkDelete(100).catch((err) => console.log(err));
+    emitter.emit("onclear", { message });
   }
 
   // COMMON COMMANDS
-  if (["h", "help"].includes(cmd)) {
-    channel.send(helpText).then(
-      () => {
-        message.react(reportGood).catch((err) => console.log(err));
-      },
-      (error) => rejectPromise(message, error)
-    );
+
+  // HELP
+  else if (["h", "help"].includes(cmd)) {
+    emitter.emit("onhelp", { message });
   }
-  if (["u", "users"].includes(cmd)) {
+
+  // USER COMMANDS
+  else if (["u", "users"].includes(cmd)) {
     if (keys.includes("list")) {
       getDBUsers(message.guild).then(
         (users) => {
@@ -152,5 +150,10 @@ export default ({ message, state, client }) => {
       //   }
       // })();
     }
+  }
+
+  // NOTHING
+  else {
+    log(service.logEnd);
   }
 };

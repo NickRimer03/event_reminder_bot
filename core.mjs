@@ -3,6 +3,8 @@ import dotEnv from "dotenv";
 import Discord from "discord.js";
 import emitter from "./src/emitter.mjs";
 import AppState from "./src/state.mjs";
+import { log } from "./src/utils.mjs";
+import { botReady } from "./src/texts.mjs";
 
 dotEnv.config({ path: path.resolve() + "/.env" });
 
@@ -10,7 +12,7 @@ const state = new AppState();
 const client = new Discord.Client();
 
 client.on("ready", () => {
-  console.log("-- event_reminder_bot ready");
+  log(botReady);
   state.bot = true;
 });
 

@@ -1,15 +1,29 @@
 import appConfig from "../config.mjs";
-import { reportBad } from "./texts.mjs";
+import { reportGood, reportBad, regExpPatterns, service } from "./texts.mjs";
 
-const { maxDisplayNameLength } = appConfig;
+const { cmdPrefix, argPrefix, maxDisplayNameLength } = appConfig;
 
-export function rejectPromise(msg, err) {
-  msg.react(reportBad).catch((err) => console.log(err));
-  console.log(err);
+export function log() {
+  console.log(...arguments);
+}
+
+export function resolvePromise({ message, command, react = true }) {
+  if (react) {
+    message.react(reportGood).catch((err) => log(err));
+  }
+  log(service[command].ok);
+  log(service.logEnd);
+}
+
+export function rejectPromise({ message, error, command }) {
+  message.react(reportBad).catch((err) => log(err));
+  log(service[command].fail);
+  log(error);
+  log(service.logEnd);
 }
 
 export function cutUnwantedSymbols(str) {
-  return str.replace(/[^A-Za-zА-Яа-я 0-9.,?"!@#$%^&*()\-_=+;:<>\/\\|{}\[\]`~]*/g, "");
+  return str.replace(regExpPatterns.unwanted, "");
 }
 
 export function cutUserName(name) {
@@ -31,4 +45,20 @@ export function parseDBUsersTable(table, guild) {
   return users;
 }
 
-export default { rejectPromise, parseDBUsersTable, cutUserName, cutUnwantedSymbols };
+export function repl(content) {
+  const str = content.slice(cmdPrefix.length).trim();
+  const cmd = (str.match(/^\S+/) || [])[0];
+  const args = (str.match(new RegExp(regExpPatterns.args, "g")) || []).map((elem) =>
+    Object.fromEntries(
+      elem
+        .trim()
+        .split(/ +/)
+        .map((e, i) => (i === 0 ? ["key", e.slice(argPrefix.length)] : ["val", e]))
+    )
+  );
+  const keys = args.map(({ key }) => key);
+
+  return { cmd, args, keys };
+}
+
+export default { log, resolvePromise, rejectPromise, parseDBUsersTable, cutUserName, cutUnwantedSymbols, repl };
