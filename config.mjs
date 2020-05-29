@@ -1,5 +1,5 @@
 export default {
-  cmdPrefix: "! ",
+  cmdPrefix: "? ",
   argPrefix: "--",
   maxDisplayNameLength: 18,
   usersPerTable: 20,

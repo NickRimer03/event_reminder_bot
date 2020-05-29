@@ -1,6 +1,8 @@
 import { log, rejectPromise, resolvePromise } from "../utils.mjs";
 import { service } from "../texts.mjs";
 
+const command = "clear";
+
 export default ({ message }) => {
   const { channel } = message;
 
@@ -8,6 +10,6 @@ export default ({ message }) => {
 
   channel
     .bulkDelete(100)
-    .then(() => resolvePromise({ command: "clear", react: false }))
-    .catch((error) => rejectPromise({ message, error, command: "clear" }));
+    .then(() => resolvePromise({ command, react: false }))
+    .catch((error) => rejectPromise({ message, error, command }));
 };

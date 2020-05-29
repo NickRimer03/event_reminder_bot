@@ -31,11 +31,12 @@ export function cutUserName(name) {
   return cutName.length > maxDisplayNameLength ? `${cutName.slice(0, maxDisplayNameLength - 3)}...` : cutName;
 }
 
-export function parseDBUsersTable(table, guild) {
+export function parseDBUsersTable({ table, guild }) {
   const users = { members: new Map(), longest: 0 };
 
   table.forEach(({ id, rancor, aat, sith }) => {
-    const name = cutUserName(guild.members.get(id.trim()).displayName);
+    const user = guild.members.cache.get(id.trim());
+    const name = cutUserName((user && user.displayName) || "UserNotFound");
     users.members.set(id.trim(), { name, rancor, aat, sith });
     if (name.length > users.longest) {
       users.longest = name.length;
@@ -61,4 +62,17 @@ export function repl(content) {
   return { cmd, args, keys };
 }
 
-export default { log, resolvePromise, rejectPromise, parseDBUsersTable, cutUserName, cutUnwantedSymbols, repl };
+export function mergeArrays() {
+  return [].concat([...arguments].flat(Infinity)).filter((e, i, a) => a.indexOf(e) === i);
+}
+
+export default {
+  log,
+  resolvePromise,
+  rejectPromise,
+  parseDBUsersTable,
+  cutUserName,
+  cutUnwantedSymbols,
+  repl,
+  mergeArrays,
+};

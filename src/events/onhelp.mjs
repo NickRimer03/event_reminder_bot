@@ -1,6 +1,8 @@
 import { log, rejectPromise, resolvePromise } from "../utils.mjs";
 import { helpText, service } from "../texts.mjs";
 
+const command = "help";
+
 export default ({ message }) => {
   const { channel } = message;
 
@@ -8,6 +10,6 @@ export default ({ message }) => {
 
   channel
     .send(helpText)
-    .then(() => resolvePromise({ message, command: "help" }))
-    .catch((error) => rejectPromise({ message, error, command: "help" }));
+    .then(() => resolvePromise({ message, command }))
+    .catch((error) => rejectPromise({ message, error, command }));
 };

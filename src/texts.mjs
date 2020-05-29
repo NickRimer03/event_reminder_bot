@@ -15,6 +15,7 @@ export const botReady = "-- event_reminder_bot ready";
 export const reportGood = "✅";
 export const reportBad = "❌";
 export const dbError = "Error with connection to database. Please, contact this bot creator.";
+export const noPermissions = "Not enough permissions.";
 
 export const service = {
   clear: {
@@ -35,4 +36,4 @@ export const regExpPatterns = {
   unwanted: /[^A-Za-zА-Яа-я 0-9.,?"!@#$%^&*()\-_=+;:<>\/\\|{}\[\]`~]*/g,
 };
 
-export default { helpText, botReady, reportGood, reportBad, dbError, service, regExpPatterns };
+export default { helpText, botReady, reportGood, reportBad, dbError, service, regExpPatterns, noPermissions };
