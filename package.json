@@ -10,10 +10,14 @@
   "author": "Nick Rimer",
   "license": "MIT",
   "devDependencies": {
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "eslint": "^7.15.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.2.0",
+    "prettier": "^2.2.1"
   },
   "dependencies": {
-    "discord.js": "^12.2.0",
-    "pg": "^8.2.1"
+    "discord.js": "^12.5.1",
+    "pg": "^8.5.1"
   }
 }
